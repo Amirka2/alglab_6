@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace alglab_6
@@ -23,9 +24,10 @@ namespace alglab_6
             Items = new Item<U>[capacity];
         }
 
-        public void Add(U data)
+        public void Add(string key, U data)
         {
-            Add(new Item<U>(data));
+            Add(new Item<U>(key, data));
+            Console.WriteLine(data);
         }
         private int Add(Item<U> item)
         {
@@ -33,24 +35,32 @@ namespace alglab_6
             if (LoadFactor.CompareTo(factor) <= 0) ResizeTable();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
-            var i = 0;
-            do {
-                var index = CalculateHash(item.Key, i++);
-                if (Items[index] is not null) continue;
-                Items[index] = item;
+            var index = CalculateHash(item.Key);
+
+            for (int i = index; i < Items.Length; i++)
+            { 
+                if (Items[i] is not null)
+                {
+                    if (Items[i].Key == item.Key)
+                    {
+                        return -1;
+                    }
+                    continue;
+                }
+                Items[i] = item;
                 loaded++;
                 return index;
-            } while (i < loaded);
+            } 
 
             return -1;
         }
 
-        public bool Remove(Item<U> item)
+        public bool Remove(string key)//? key or value
         {
             var i = 0;
             do {
-                var index = CalculateHash(item.Key, i++);
-                if (Items[index] == null || Items[i].Key != item.Key) continue;
+                var index = CalculateHash(key);
+                if (Items[index] == null || Items[i].Key != key) continue;
                 Items[index] = null;
                 loaded--;
                 return true;
@@ -90,17 +100,32 @@ namespace alglab_6
             Item<U>[] items = new Item<U>[Items.Length * 2];
             for (int i = 0; i < Items.Length; i++)
             {
-                
+                if (Items[i] is null) continue;
+                var index = CalculateHash(Items[i].Key);
+                items[i] = Items[i];
             }
-            Items = new Item<U>[Items.Length * 2];
-            foreach (var item in items)
-            {
-                this.Add(item);
-            }
+
+            Items = items;
         }
-        private static int CalculateHash(string key, int i)
+        public static int CalculateHash(string key)
         {
-            return key[0] - 'a' + i;
+            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException();
+            return key.Length;
+
+            //switch (value)
+            //{
+            //    case string s:
+            //        break;
+            //    case int i:
+            //        break;
+            //    case byte b:
+            //        break;
+            //    case double d:
+            //        break;
+            //    default:
+            //        tmp = value.ToString();
+            //        break;
+            //}
         }
     }
 }

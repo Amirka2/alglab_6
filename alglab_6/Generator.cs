@@ -5,21 +5,27 @@ namespace alglab_6
 {
 	public static class Generator<U>
 	{
-		public static string GenerateKey(U value)
+		public static string GenerateHash(U value)
 		{
+            var tmp = "";
 			if (value is null) throw new ArgumentNullException();
             int length = 0;
 
-            if (value is string)
-            {
-                length = value.ToString().Length;
-            } else if (value is int)
-            {
-                length = Int32.Parse(value.ToString());
-            } else if (value is float)
-            {
-                length = Int32.Parse(value.ToString());
+            switch (value){ 
+                case string s:
+                    break;
+                case int i:
+                    break;
+                case byte b:
+                    break;
+                case double d:
+                    break;
+                default:
+                    tmp = value.ToString();
+                    break;
             }
+            
+
 
             var rnd = new Random();
             var sb = new StringBuilder();
