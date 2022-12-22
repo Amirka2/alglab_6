@@ -16,8 +16,7 @@ namespace alglab_6
         public HashTable(int capacity, int loadFactor) : base(capacity, loadFactor)
         {
         }
-
-
+        
         public override bool Add(string key, U data)
         {
             return Add(new Item<U>(key, data));
@@ -48,12 +47,12 @@ namespace alglab_6
             return false;
         }
 
-        public override bool Remove(string key)//? key or value
+        public override bool Remove(Item<U> item)//? key or value
         {
             var i = 0;
             do {
-                var index = CalculateHash(key);
-                if (_items[index] == null || _items[i].Key != key) continue;
+                var index = GetIndexByHash(item.GetHashCode());
+                if (_items[index] == null || _items[i].Key != item.Key) continue;
                 _items[index] = null;
                 _loaded--;
                 return true;
@@ -90,12 +89,6 @@ namespace alglab_6
         //      }
         
 
-        
-        public static int CalculateHash(string key)
-        {
-            if (string.IsNullOrEmpty(key)) throw new ArgumentNullException();
-            return key.Length;
-
             //switch (value)
             //{
             //    case string s:
@@ -110,8 +103,7 @@ namespace alglab_6
             //        tmp = value.ToString();
             //        break;
             //}
-        }
-
+            
     }
 }
 
