@@ -7,7 +7,7 @@ namespace alglab_6
 {
     public class HashTable<U> : Table<U>
     {
-        public HashTable() : base()
+        public HashTable()
         {
         }
         public HashTable(int capacity) : base(capacity)
@@ -87,21 +87,6 @@ namespace alglab_6
         //          return false;
         //      }
         
-
-            //switch (value)
-            //{
-            //    case string s:
-            //        break;
-            //    case int i:
-            //        break;
-            //    case byte b:
-            //        break;
-            //    case double d:
-            //        break;
-            //    default:
-            //        tmp = value.ToString();
-            //        break;
-            //}
             
     }
 }
