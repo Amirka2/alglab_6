@@ -29,39 +29,65 @@ namespace alglab_6
             var index = GetIndexByHash(item.GetHashCode());
 
             for (int i = index; i < _items.Length; i++)
-            { 
-                if (_items[i] is not null)
+            {
+                if (item.Equals(_items[i]))
                 {
-                    if (_items[i].Key == item.Key)
-                    {
-                        return false;
-                    }
-                    continue;
+                    return false;
                 }
-                _items[i] = item;
-                _loaded++;
-                return true;
-            } 
+
+                if (_items[i] == null) //если проверили все значения которые могли сместиться . заменить на проверку удаленных хэшей
+                {
+                    _items[index] = item;
+                    _loaded++;
+                    return true;                
+                }
+            }
 
             return false;
         }
 
-        public override bool Remove(Item<U> item)//? key or value
+        public override bool Remove(string key, U value)
         {
-            var i = 0;
+            return Remove(new Item<U>(key, value));
+        }
+        private bool Remove(Item<U> item)//? key or value
+        {
+            var index = GetIndexByHash(item.GetHashCode());
+
             do {
-                var index = GetIndexByHash(item.GetHashCode());
-                if (_items[index] == null || _items[i].Key != item.Key) continue;
-                _items[index] = null;
-                _loaded--;
-                return true;
-            } while (i < _loaded);
+                if (item.Equals(_items[index]))
+                {
+                    _items[index] = null;
+                    _loaded--;
+                    return true;
+                }
+
+                index++;
+            } while (index < _loaded);
 
             return false;
         }
 
-        
-            
+        public override bool Contains(string key, U value)
+        {
+            return Contains(new Item<U>(key, value));
+        }
+
+        private bool Contains(Item<U> item)
+        {
+            var index = GetIndexByHash(item.GetHashCode());
+
+            do {
+                if (item.Equals(_items[index]))
+                {
+                    return true;
+                }
+
+                index++;
+            } while (index < _loaded);
+
+            return false;
+        }
     }
 }
 
