@@ -22,6 +22,7 @@ public abstract class Table<U>
 
     public abstract bool Add(string key, U data);
     public abstract bool Remove(Item<U> item);
+    public abstract bool Contains(Item<U> item);
     
     protected virtual void ResizeTable()
     {

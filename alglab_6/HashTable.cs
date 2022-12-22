@@ -59,6 +59,11 @@ namespace alglab_6
 
             return false;
         }
+
+        public override bool Contains(Item<U> item)
+        {
+            throw new NotImplementedException();
+        }
         //public bool Contains(U value)
         //{
         //    // Item<U> item = new Item<U>(value);
@@ -88,20 +93,20 @@ namespace alglab_6
         //      }
         
 
-            //switch (value)
-            //{
-            //    case string s:
-            //        break;
-            //    case int i:
-            //        break;
-            //    case byte b:
-            //        break;
-            //    case double d:
-            //        break;
-            //    default:
-            //        tmp = value.ToString();
-            //        break;
-            //}
+            // switch (value)
+            // {
+            //     case string s:
+            //         break;
+            //     case int i:
+            //         break;
+            //     case byte b:
+            //         break;
+            //     case double d:
+            //         break;
+            //     default:
+            //         tmp = value.ToString();
+            //         break;
+            // }
             
     }
 }
