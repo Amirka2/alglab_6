@@ -24,14 +24,23 @@ public class MyDictionary<U> : Table<U>
         return true;
     }
 
-    public override bool Remove(Item<U> elem)
+    private bool Remove(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHashCode());
         return this.lst[index].Remove(elem);
     }
 
-    public override bool Contains(Item<U> item)
+    public override bool Remove(string key, U value)
+    {
+        return Remove(new Item<U>(key, value));
+    }
+
+    public bool Contains(Item<U> item)
     {
         return false;
+    }
+    public override bool Contains(string key, U value)
+    {
+        return Contains(new Item<U>(key, value));
     }
 }
