@@ -7,7 +7,8 @@ namespace alglab_6
 		public U Value { get; private set; }
 
         public Item(string key, U value)
-		{
+        {
+	        if (value == null) throw new ArgumentNullException();
 			Key = key;
 			Value = value;
 		}
@@ -20,7 +21,7 @@ namespace alglab_6
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return String.GetHashCode(Key);
         }
     }
 }

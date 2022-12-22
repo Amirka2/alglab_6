@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace alglab_6
 {
-    public class HashTable<U>
+    public class HashTable<U> 
     {
         private Item<U>[] Items;
         private readonly double LoadFactor = 0.75F;
@@ -12,7 +13,7 @@ namespace alglab_6
 
         public HashTable()
         {
-            Items = new Item<U>[255];
+            Items = new Item<U>[8];
         }
         public HashTable(int capacity)
         {
@@ -35,7 +36,7 @@ namespace alglab_6
             if (LoadFactor.CompareTo(factor) <= 0) ResizeTable();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
-            var index = CalculateHash(item.Key);
+            var index = GetIndexByHash(item.GetHashCode());
 
             for (int i = index; i < Items.Length; i++)
             { 
@@ -101,11 +102,16 @@ namespace alglab_6
             for (int i = 0; i < Items.Length; i++)
             {
                 if (Items[i] is null) continue;
-                var index = CalculateHash(Items[i].Key);
+                var index = GetIndexByHash(Items[i].GetHashCode());
                 items[i] = Items[i];
             }
 
             Items = items;
+        }
+
+        private int GetIndexByHash(int hash)
+        {
+            return hash % Items.Length;
         }
         public static int CalculateHash(string key)
         {
@@ -127,6 +133,7 @@ namespace alglab_6
             //        break;
             //}
         }
+
     }
 }
 
