@@ -39,4 +39,10 @@ public abstract class Table<U>
     {
         return Math.Abs(hash % _items.Length);
     }
+
+    protected void CheckSize()
+    {
+        double factor = (double)_loaded / _items.Length;
+        if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
+    }
 }

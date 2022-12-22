@@ -23,8 +23,7 @@ namespace alglab_6
         }
         private bool Add(Item<U> item)
         {
-            double factor = (double)_loaded / _items.Length;
-            if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
+            CheckSize();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
             var index = GetIndexByHash(item.GetHashCode());
