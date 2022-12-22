@@ -1,6 +1,6 @@
 ﻿namespace alglab_6;
 
-public class MyDictionary<U> : Table<U>
+public class AddressTable<U> : Table<U>
 {
     private LinkedList<Item<U>>[] lst;
 
