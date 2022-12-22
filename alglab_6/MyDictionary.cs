@@ -30,8 +30,16 @@ public class MyDictionary<U> : Table<U>
         return this.lst[index].Remove(elem);
     }
 
-    public override bool Contains(Item<U> item)
+    public override bool Contains(Item<U> elem)
     {
+        foreach (var e in lst)
+        {
+            if (e.Contains(elem))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 }
