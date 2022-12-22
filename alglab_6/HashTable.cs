@@ -5,67 +5,59 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace alglab_6
 {
-    public class HashTable<U> 
+    public class HashTable<U> : Table<U>
     {
-        private Item<U>[] Items;
-        private readonly double LoadFactor = 0.75F;
-        private int loaded = 0;
-
-        public HashTable()
+        public HashTable() : base()
         {
-            Items = new Item<U>[8];
         }
-        public HashTable(int capacity)
+        public HashTable(int capacity) : base(capacity)
         {
-            Items = new Item<U>[capacity];
         }
-        public HashTable(int capacity, float loadFactor)
+        public HashTable(int capacity, int loadFactor) : base(capacity, loadFactor)
         {
-            LoadFactor = loadFactor;
-            Items = new Item<U>[capacity];
         }
 
-        public void Add(string key, U data)
+
+        public override bool Add(string key, U data)
         {
-            Add(new Item<U>(key, data));
-            Console.WriteLine(data);
+            return Add(new Item<U>(key, data));
         }
-        private int Add(Item<U> item)
+        private bool Add(Item<U> item)
         {
-            double factor = (double)loaded / Items.Length;
-            if (LoadFactor.CompareTo(factor) <= 0) ResizeTable();
+            double factor = (double)_loaded / _items.Length;
+            if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
             var index = GetIndexByHash(item.GetHashCode());
 
-            for (int i = index; i < Items.Length; i++)
+            for (int i = index; i < _items.Length; i++)
             { 
-                if (Items[i] is not null)
+                if (_items[i] is not null)
                 {
-                    if (Items[i].Key == item.Key)
+                    if (_items[i].Key == item.Key)
                     {
-                        return -1;
+                        return false;
                     }
                     continue;
                 }
-                Items[i] = item;
-                loaded++;
-                return index;
+                _items[i] = item;
+                _loaded++;
+                return true;
             } 
 
-            return -1;
+            return false;
         }
 
-        public bool Remove(string key)//? key or value
+        public override bool Remove(string key)//? key or value
         {
             var i = 0;
             do {
                 var index = CalculateHash(key);
-                if (Items[index] == null || Items[i].Key != key) continue;
-                Items[index] = null;
-                loaded--;
+                if (_items[index] == null || _items[i].Key != key) continue;
+                _items[index] = null;
+                _loaded--;
                 return true;
-            } while (i < loaded);
+            } while (i < _loaded);
 
             return false;
         }
@@ -96,23 +88,9 @@ namespace alglab_6
         //          }
         //          return false;
         //      }
-        private void ResizeTable()
-        {
-            Item<U>[] items = new Item<U>[Items.Length * 2];
-            for (int i = 0; i < Items.Length; i++)
-            {
-                if (Items[i] is null) continue;
-                var index = GetIndexByHash(Items[i].GetHashCode());
-                items[i] = Items[i];
-            }
+        
 
-            Items = items;
-        }
-
-        private int GetIndexByHash(int hash)
-        {
-            return hash % Items.Length;
-        }
+        
         public static int CalculateHash(string key)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException();
