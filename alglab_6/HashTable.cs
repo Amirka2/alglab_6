@@ -59,33 +59,7 @@ namespace alglab_6
 
             return false;
         }
-        //public bool Contains(U value)
-        //{
-        //    // Item<U> item = new Item<U>(value);
-        //    var i = 0;
-        //    do {
-        //        var index = CalculateHash(item.Key, i++);
-        //        if (Items[index] == null || Items[index].Key != item.Key) continue;
-        //        return true;
-        //    } while (i < loaded);
 
-        //    return false;
-        //}
-        //public bool ContainsValue(T value)
-        //{
-        //          var hash = GetHashCode(key);
-        //          if (Items[hash] == null) { return false; }      //если нет элемента по хэшу 
-        //          else                                            //если есть элемент смотрим все элементы по хэшу
-        //          {
-        //              var current = Items[hash];
-        //              while (current != null)
-        //              {
-        //                  if (current.Key.Equals(key)) { return true; }
-        //                  current = current.Next;
-        //              }
-        //          }
-        //          return false;
-        //      }
         
             
     }
