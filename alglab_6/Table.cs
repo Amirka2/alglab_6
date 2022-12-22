@@ -3,7 +3,7 @@ namespace alglab_6;
 public abstract class Table<U>
 {
     protected Item<U>[] _items;
-    protected readonly float _loadFactor = 0.75F;
+    protected readonly double _loadFactor = 0.75F;
     protected int _loaded = 0;
 
     public Table()
@@ -37,6 +37,6 @@ public abstract class Table<U>
     }
     protected int GetIndexByHash(int hash)
     {
-        return hash % _items.Length;
+        return Math.Abs(hash % _items.Length);
     }
 }
