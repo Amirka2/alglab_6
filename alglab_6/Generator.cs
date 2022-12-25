@@ -3,36 +3,27 @@ using System.Text;
 
 namespace alglab_6
 {
-	public static class Generator<U>
+	public static class Generator
 	{
-		public static string GenerateHash(U value)
+		public static Item<string>[] GenerateItems(int count)
 		{
-            var tmp = "";
-			if (value is null) throw new ArgumentNullException();
-            int length = 0;
+			Item<string>[] items = new Item<string>[count];
+			for (int i = 0; i < items.Length; i++)
+			{
+				string key = GenerateKey(i);
+				items[i] = new Item<string>(key, key);
+			}
 
-            switch (value){ 
-                case string s:
-                    break;
-                case int i:
-                    break;
-                case byte b:
-                    break;
-                case double d:
-                    break;
-                default:
-                    tmp = value.ToString();
-                    break;
-            }
-            
+			return items;
+		}
 
-
-            var rnd = new Random();
-            var sb = new StringBuilder();
-            for (var i = 0; i < length; i++)
-                sb.Append((char)(rnd.Next(0, 26) + 'a'));
-            return sb.ToString();
-        }
+		private static string GenerateKey(int index)
+		{
+			Random rnd = new Random();
+			int x = rnd.Next(0, 10000);
+			
+			return (x.ToString() + index.ToString());
+		}
 	}
 }
 
