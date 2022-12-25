@@ -1,16 +1,22 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using alglab_6;
 
-Console.WriteLine("Hello, orld!");
-HashTable<int> ht = new HashTable<int>();
-ht.Add("1", 1);
-ht.Add("2", 2);
-ht.Add("3", 3);
-ht.Add("3", 3);
-ht.Add("3", 3);
-ht.Add("3", 3);
-ht.Add("3", 3);
-ht.Add("3", 3);
-ht.Add("3", 0);
-ht.Add("3", 3);
-ht.Add("3", 3);
+HashTable<string> ht = new HashTable<string>();
+MyDictionary<string> at = new MyDictionary<string>();
+FillTable(ht, 10000);
+FillTable(at, 10000);
+
+
+
+
+
+
+
+void FillTable(Table<string> table, int count)
+{
+    Item<string>[] items = Generator.GenerateItems(count);
+    foreach (var item in items)
+    {
+        table.AddItem(item);
+    }
+}
