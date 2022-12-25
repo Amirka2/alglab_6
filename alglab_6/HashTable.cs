@@ -7,6 +7,8 @@ namespace alglab_6
 {
     public class HashTable<U> : Table<U>
     {
+        private List<int> _clusterCounts = new List<int>();
+
         public HashTable()
         {
         }
@@ -34,17 +36,20 @@ namespace alglab_6
 
             for (int i = index; i < _items.Length; i++)
             {
+                _clusterCounts.Add(0);
                 if (item.Equals(_items[i]))
                 {
                     return false;
                 }
 
-                if (_items[i] == null) //если проверили все значения которые могли сместиться . заменить на проверку удаленных хэшей
+                if (_items[i] == null) //если проверили все значения которые могли сместиться(конец кластера) . заменить на проверку удаленных хэшей
                 {
                     _items[index] = item;
                     _loaded++;
                     return true;                
                 }
+
+                _clusterCounts[_loaded]++; //инкремент счетчика кластеров
             }
 
             return false;
@@ -102,31 +107,10 @@ namespace alglab_6
 
         public int GetLargestClusterLength()
         {
-            int[] counts = new int[_items.Length];
-            
-            for (int i = 0; i < counts.Length; i++)
-            {
-                int j = i;
-                while (_items[j] == null)
-                {
-                    j++;
-                }
-                Item<U> firstItem = _items[j];
-                
-                var index = GetIndexByHash(firstItem.GetHashCode());
-
-                while (_items[index].Equals(_items[index + 1]))
-                {
-                    counts[i]++;
-                    i++;
-                }
-            }
-
-            int maxClusterLength = GetMax(counts);
-            return maxClusterLength;
+            return GetMax(_clusterCounts.ToArray());
         }
 
-        private int GetMax(int[] arr)
+        private static int GetMax(int[] arr)
         {
             int max = arr[0];
             for (int i = 0; i < arr.Length; i++)
