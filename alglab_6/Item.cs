@@ -12,7 +12,7 @@ namespace alglab_6
 			Key = key;
 			Value = value;
 		}
-        public override bool Equals(object? obj)
+        public override bool Equals(object? obj)		//нужно ли учитывать value при сравнении?
         {
             var item = (Item<U>)obj;
             if (this == item) return true;
