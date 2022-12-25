@@ -1,125 +1,54 @@
-﻿using System;
-using System.Collections;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+namespace alglab_6;
 
-namespace alglab_6
+public abstract class HashTable<U>
 {
-    public class HashTable<U> : Table<U>
+    protected Item<U>[] _items;
+    protected readonly double _loadFactor = 0.75F;
+    protected int _loaded = 0;
+
+    public HashTable()
     {
-        private List<int> _clusterCounts = new List<int>();
+        _items = new Item<U>[8];
+    }
+    public HashTable(int capacity)
+    {
+        _items = new Item<U>[capacity];
+    }
+    public HashTable(int capacity, float loadFactor)
+    {
+        _loadFactor = loadFactor;
+        _items = new Item<U>[capacity];
+    }
 
-        public HashTable()
-        {
-        }
-        public HashTable(int capacity) : base(capacity)
-        {
-        }
-        public HashTable(int capacity, int loadFactor) : base(capacity, loadFactor)
-        {
-        }
-        
-        public override bool Add(string key, U data)
-        {
-            return Add(new Item<U>(key, data));
-        }
-        public override bool AddItem(Item<U> item)
-        {
-            return Add(item);
-        }
-        private bool Add(Item<U> item)
-        {
-            CheckSize();
-            if (item.Value == null) throw new ArgumentNullException("item's value is null!");
+    public abstract bool Add(string key, U value);
+    public abstract bool AddItem(Item<U> item);
+    public abstract bool Remove(string key, U value);
+    public abstract bool RemoveItem(Item<U> item);
 
-            var index = GetIndexByHash(item.GetHashCode());
+    public abstract bool Contains(string key, U value);
+    public abstract bool ContainsItem(Item<U> item);
 
-            for (int i = index; i < _items.Length; i++)
-            {
-                _clusterCounts.Add(0);
-                if (item.Equals(_items[i]))
-                {
-                    return false;
-                }
-
-                if (_items[i] == null) //если проверили все значения которые могли сместиться(конец кластера) . заменить на проверку удаленных хэшей
-                {
-                    _items[index] = item;
-                    _loaded++;
-                    return true;                
-                }
-
-                _clusterCounts[_loaded]++; //инкремент счетчика кластеров
-            }
-
-            return false;
+    
+    protected virtual void ResizeTable()
+    {
+        Item<U>[] items = new Item<U>[_items.Length * 2];
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] is null) continue;
+            var index = GetIndexByHash(_items[i].GetHashCode());
+            items[i] = _items[i];
         }
 
-        public override bool Remove(string key, U value)
-        {
-            return Remove(new Item<U>(key, value));
-        }
-        public override bool RemoveItem(Item<U> item)
-        {
-            return Remove(item);
-        }
-        private bool Remove(Item<U> item)//? key or value
-        {
-            var index = GetIndexByHash(item.GetHashCode());
+        _items = items;
+    }
+    protected int GetIndexByHash(int hash)
+    {
+        return Math.Abs(hash % _items.Length);
+    }
 
-            do {
-                if (item.Equals(_items[index]))
-                {
-                    _items[index] = null;
-                    _loaded--;
-                    return true;
-                }
-
-                index++;
-            } while (index < _loaded);
-
-            return false;
-        }
-
-        public override bool Contains(string key, U value)
-        {
-            return Contains(new Item<U>(key, value));
-        }
-        public override bool ContainsItem(Item<U> item)
-        {
-            return Contains(item);
-        }
-        private bool Contains(Item<U> item)
-        {
-            var index = GetIndexByHash(item.GetHashCode());
-
-            do {
-                if (item.Equals(_items[index]))
-                {
-                    return true;
-                }
-
-                index++;
-            } while (index < _loaded);
-
-            return false;
-        }
-
-        public int GetLargestClusterLength()
-        {
-            return GetMax(_clusterCounts.ToArray());
-        }
-
-        private static int GetMax(int[] arr)
-        {
-            int max = arr[0];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                if (max < arr[i]) max = arr[i];
-            }
-
-            return max;
-        }
+    protected void CheckSize()
+    {
+        double factor = (double)_loaded / _items.Length;
+        if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
     }
 }
-

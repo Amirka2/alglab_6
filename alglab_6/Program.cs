@@ -1,18 +1,18 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using alglab_6;
 
-HashTable<string> ht = new HashTable<string>();
-MyDictionary<string> at = new MyDictionary<string>();
-FillTable(ht, 10000);
-FillTable(at, 10000);
+AdressedHashHashTable<string> ht = new AdressedHashHashTable<string>();
+//MyDictionary<string> at = new MyDictionary<string>();
+FillTable(ht, 100);
+    //FillTable(at, 10000);
+
+int cluster = ht.GetLargestClusterLength();
+Console.WriteLine(cluster);
 
 
 
 
-
-
-
-void FillTable(Table<string> table, int count)
+void FillTable(HashTable<string> table, int count)
 {
     Item<string>[] items = Generator.GenerateItems(count);
     foreach (var item in items)

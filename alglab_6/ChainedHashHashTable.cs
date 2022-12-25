@@ -1,6 +1,6 @@
 ﻿namespace alglab_6;
 
-public class MyDictionary<U> : Table<U>
+public class ChainedHashHashTable<U> : HashTable<U>
 {
     private LinkedList<Item<U>>[] lst;
 
