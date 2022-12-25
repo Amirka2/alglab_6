@@ -21,6 +21,10 @@ namespace alglab_6
         {
             return Add(new Item<U>(key, data));
         }
+        public override bool AddItem(Item<U> item)
+        {
+            return Add(item);
+        }
         private bool Add(Item<U> item)
         {
             CheckSize();
@@ -50,6 +54,10 @@ namespace alglab_6
         {
             return Remove(new Item<U>(key, value));
         }
+        public override bool RemoveItem(Item<U> item)
+        {
+            return Remove(item);
+        }
         private bool Remove(Item<U> item)//? key or value
         {
             var index = GetIndexByHash(item.GetHashCode());
@@ -72,7 +80,10 @@ namespace alglab_6
         {
             return Contains(new Item<U>(key, value));
         }
-
+        public override bool ContainsItem(Item<U> item)
+        {
+            return Contains(item);
+        }
         private bool Contains(Item<U> item)
         {
             var index = GetIndexByHash(item.GetHashCode());

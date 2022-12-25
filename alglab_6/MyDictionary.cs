@@ -6,10 +6,13 @@ public class MyDictionary<U> : Table<U>
 
     public override bool Add(string key, U data)
     {
-        return AddItem(new Item<U>(key, data));
+        return Add(new Item<U>(key, data));
     }
-
-    private bool AddItem(Item<U> elem)
+    public override bool AddItem(Item<U> item)
+    {
+        return Add(item);
+    }
+    private bool Add(Item<U> elem)
     {
         CheckSize();
         var index = GetIndexByHash(elem.GetHashCode());
@@ -23,21 +26,27 @@ public class MyDictionary<U> : Table<U>
         lst[index].AddLast(elem);
         return true;
     }
-
+    
+    public override bool Remove(string key, U value)
+    {
+        return Remove(new Item<U>(key, value));
+    }
+    public override bool RemoveItem(Item<U> item)
+    {
+        return Remove(item);
+    }
     private bool Remove(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHashCode());
         return this.lst[index].Remove(elem);
     }
-
-    public override bool Remove(string key, U value)
-    {
-        return Remove(new Item<U>(key, value));
-    }
-
     public bool Contains(Item<U> item)
     {
         return false;
+    }
+    public override bool ContainsItem(Item<U> item)
+    {
+        return Contains(item);
     }
     public override bool Contains(string key, U value)
     {
