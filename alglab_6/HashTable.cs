@@ -99,6 +99,43 @@ namespace alglab_6
 
             return false;
         }
+
+        public int GetLargestClusterLength()
+        {
+            int[] counts = new int[_items.Length];
+            
+            for (int i = 0; i < counts.Length; i++)
+            {
+                int j = i;
+                while (_items[j] == null)
+                {
+                    j++;
+                }
+                Item<U> firstItem = _items[j];
+                
+                var index = GetIndexByHash(firstItem.GetHashCode());
+
+                while (_items[index].Equals(_items[index + 1]))
+                {
+                    counts[i]++;
+                    i++;
+                }
+            }
+
+            int maxClusterLength = GetMax(counts);
+            return maxClusterLength;
+        }
+
+        private int GetMax(int[] arr)
+        {
+            int max = arr[0];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (max < arr[i]) max = arr[i];
+            }
+
+            return max;
+        }
     }
 }
 
