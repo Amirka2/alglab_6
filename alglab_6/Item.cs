@@ -12,7 +12,7 @@ namespace alglab_6
 			Key = key;
 			Value = value;
 		}
-        public override bool Equals(object? obj)
+        public override bool Equals(object? obj)		//нужно ли учитывать value при сравнении?
         {
             var item = (Item<U>)obj;
             if (this == item) return true;
@@ -21,26 +21,6 @@ namespace alglab_6
         }
         public override int GetHashCode()
         {
-	        switch (Value)
-	        {
-		        case string s:
-			        return Key.GetHashCode() + Value.ToString().GetHashCode();
-			        break;
-		        case int i:
-			        return Key.GetHashCode() + Convert.ToInt32(Value).GetHashCode();
-			        break;
-		        case byte b:
-			        return Key.GetHashCode() + Convert.ToByte(Value).GetHashCode();
-			        break;
-		        case double d:
-			        return Key.GetHashCode() + Convert.ToDouble(Value).GetHashCode();
-			        break;
-		        case char a:
-			        return Key.GetHashCode() + Convert.ToChar(Value).GetHashCode();
-			        break;
-		        default:
-			        break;
-	        }
             return String.GetHashCode(Key);
         }
     }
