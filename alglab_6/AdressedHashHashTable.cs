@@ -15,7 +15,7 @@ namespace alglab_6
         public AdressedHashHashTable(int capacity) : base(capacity)
         {
         }
-        public AdressedHashHashTable(int capacity, int loadFactor) : base(capacity, loadFactor)
+        public AdressedHashHashTable(int capacity, float loadFactor) : base(capacity, loadFactor)
         {
         }
         

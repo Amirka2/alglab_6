@@ -3,6 +3,16 @@
 public class ChainedHashHashTable<U> : HashTable<U>
 {
     private LinkedList<Item<U>>[] lst;
+    
+    public ChainedHashHashTable() {}
+
+    public ChainedHashHashTable(int capacity) : base(capacity)
+    {
+    }
+
+    public ChainedHashHashTable(int capacity, float loadFactor) :base(capacity, loadFactor)
+    {
+    }
 
     public override bool Add(string key, U data)
     {
