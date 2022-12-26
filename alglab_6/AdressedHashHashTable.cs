@@ -65,15 +65,11 @@ namespace alglab_6
             return false;
         }
 
-        public override bool Remove(string key, U value)
+        public override bool Remove(string key)
         {
-            return Remove(new Item<U>(key, value));
+            return Remove(new Item<string>(key, ""));
         }
-        public override bool RemoveItem(Item<U> item)
-        {
-            return Remove(item);
-        }
-        private bool Remove(Item<U> item)//? key or value
+        private bool Remove(Item<string> item)
         {
             var index = GetIndexByHash(item.GetHash());
 
@@ -91,15 +87,11 @@ namespace alglab_6
             return false;
         }
 
-        public override bool Contains(string key, U value)
+        public override bool Contains(string key)
         {
-            return Contains(new Item<U>(key, value));
+            return Contains(new Item<string>(key, ""));
         }
-        public override bool ContainsItem(Item<U> item)
-        {
-            return Contains(item);
-        }
-        private bool Contains(Item<U> item)
+        private bool Contains(Item<string> item)
         {
             var index = GetIndexByHash(item.GetHash());
 
