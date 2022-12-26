@@ -25,7 +25,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
     private bool Add(Item<U> elem)
     {
         CheckSize();
-        var index = GetIndexByHash(elem.GetHashCode());
+        var index = GetIndexByHash(elem.GetHash());
         foreach (var e in lst)
         {
             if (e.Equals(elem))
@@ -47,12 +47,12 @@ public class ChainedHashHashTable<U> : HashTable<U>
     }
     private bool Remove(Item<U> elem)
     {
-        var index = GetIndexByHash(elem.GetHashCode());
+        var index = GetIndexByHash(elem.GetHash());
         return this.lst[index].Remove(elem);
     }
     public bool Contains(Item<U> elem)
     {
-        var index = GetIndexByHash(elem.GetHashCode());
+        var index = GetIndexByHash(elem.GetHash());
 
         foreach (var e in lst[index])
         {
@@ -64,6 +64,27 @@ public class ChainedHashHashTable<U> : HashTable<U>
     {
         return Contains(item);
     }
+
+    protected override void ResizeTable()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override int GetIndexByHash(int hash)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override int GetIndexByHash(byte[] hash)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void CheckSize()
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Contains(string key, U value)
     {
         return Contains(new Item<U>(key, value));
