@@ -9,10 +9,11 @@ namespace alglab_6
     {
         private Item<U>[] _items;
         private List<int> _clusterCounts = new List<int>();
+        public int CollisionCount = 0;
 
         public AdressedHashHashTable()
         {
-            _items = new Item<U>[8];
+            _items = new Item<U>[10000];
         }
         public AdressedHashHashTable(int capacity) : base(capacity)
         {
@@ -37,7 +38,7 @@ namespace alglab_6
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
             var index = GetIndexByHash(item.GetHash());
-
+            if (_items[index] != null) CollisionCount++; //подсчет коллизий
             for (int i = index; i < _items.Length; i++)
             {
                 if (i == _items.Length - 1 && _items[i] != null)
@@ -53,8 +54,7 @@ namespace alglab_6
 
                 if (_items[i] == null) //если проверили все значения которые могли сместиться(конец кластера) . заменить на проверку удаленных хэшей
                 {
-                    _items[i] = item;
-                    Console.WriteLine(_items[i].Key + ": el, " + i + ": index");
+                    _items[i] = new Item<U>(item.Key, item.Value, i);
                     _loaded++;
                     return true;                
                 }
@@ -130,7 +130,7 @@ namespace alglab_6
                     }
                     else
                     {
-                        items[j] = _items[i];
+                        items[j] = new Item<U>(_items[i].Key, _items[i].Value, j);
                         break;
                     }
                 }
@@ -154,7 +154,7 @@ namespace alglab_6
                 sum += convertedHash;
             }
         
-            return Math.Abs(sum % _items.Length) - 1;
+            return Math.Abs(sum % _items.Length);
         }
 
         protected override int GetIndexByHash(int hash)
