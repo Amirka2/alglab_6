@@ -3,10 +3,11 @@
 public class ChainedHashHashTable<U> : HashTable<U>
 {
     private LinkedList<Item<U>>[] _lst;
+    private int load = 100; // для корректного расширения таблицы допилить 
 
     public ChainedHashHashTable()
     {
-        _lst = new LinkedList<Item<U>>[8];
+        _lst = new LinkedList<Item<U>>[1000];
     }
 
     public ChainedHashHashTable(int capacity) : base(capacity)
@@ -30,16 +31,24 @@ public class ChainedHashHashTable<U> : HashTable<U>
     private bool Add(Item<U> elem)
     {
         CheckSize();
-        var index = GetIndexByHash(elem.GetHashCode());
-        foreach (var e in _lst)
+        var index = GetIndexByHash(elem.GetHash(), _lst.Length);
+        if (_lst[index] == null)
         {
-            if (e.Equals(elem))
+            _lst[index] = new LinkedList<Item<U>>();
+            _lst[index].AddLast(elem);
+            return true;
+        } 
+        if (_lst[index] != null)
+        {
+            foreach (var el in _lst[index])
             {
-                return false;
+                if (el.Equals(elem)) return false;
             }
+            _lst[index].AddLast(elem);
         }
-        _lst[index].AddLast(elem);
+
         return true;
+
     }
     
     public override bool Remove(string key)
@@ -48,7 +57,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
     }
     private bool Remove(Item<string> elem)
     {
-        var index = GetIndexByHash(elem.GetHashCode());
+        var index = GetIndexByHash(elem.GetHash(), _lst.Length);
         if (_lst[index] == null) return false;
         foreach (var el in _lst[index])
         {
@@ -64,7 +73,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
     }
     public bool Contains(Item<string> elem)
     {
-        var index = GetIndexByHash(elem.GetHashCode());
+        var index = GetIndexByHash(elem.GetHash(), _lst.Length);
         if (_lst[index] == null) return false;
         foreach (var el in _lst[index])
         {
@@ -73,12 +82,12 @@ public class ChainedHashHashTable<U> : HashTable<U>
 
         return false;
     }
-    protected override int GetIndexByHash(int hash)
+    protected override int GetIndexByHash(int hash, int size)
     {
-        return Math.Abs(hash % _lst.Length);
+        return Math.Abs(hash % size);
     }
 
-    protected override int GetIndexByHash(byte[] hash)
+    protected override int GetIndexByHash(byte[] hash, int size)
     {
         int sum = 1;
         for (int i = 0; i < hash.Length; i++)
@@ -87,7 +96,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
             sum += convertedHash;
         }
         
-        return Math.Abs(sum % _lst.Length);    
+        return Math.Abs(sum % size);    
     }
 
     protected override void CheckSize()
@@ -96,17 +105,49 @@ public class ChainedHashHashTable<U> : HashTable<U>
         if (_loadFactor <= factor) ResizeTable();
     }
 
-    protected override void ResizeTable()
+    protected override void ResizeTable() //подредачить
     {
         LinkedList<Item<U>>[] lst = new LinkedList<Item<U>>[_lst.Length * 2];
         for (int i = 0; i < _lst.Length; i++)
         {
             if (_lst[i] is null) continue;
-            var index = GetIndexByHash(_lst[i].GetHashCode());
+            var index = GetIndexByHash(_lst[i].GetHashCode(), lst.Length);
 
             lst[index] = _lst[i];
         }
 
         _lst = lst;
+    }
+
+    public int GetCapacity()
+    {
+        return _lst.Length;
+    }
+
+    public int GetCapacity(int dimension)
+    {
+        if (_lst[dimension] == null) return 0;
+        return _lst[dimension].Count;
+    }
+
+    public int GetMaxChainLength()
+    {
+        int max;
+        for (int i = 0;; i++)
+        {
+            if (_lst[i] != null)
+            {
+                max = _lst[i].Count;
+                break;
+            }
+        }
+        foreach (var chain in _lst)
+        {
+            if (chain == null) continue;
+
+            if (chain.Count > max) max = chain.Count;
+        }
+
+        return max;
     }
 }
