@@ -53,7 +53,7 @@ public abstract class HashTable<U>
         return Math.Abs(convertedHash % _items.Length);
     }
 
-    protected void CheckSize()
+    protected virtual void CheckSize()
     {
         double factor = (double)_loaded / _items.Length;
         if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
