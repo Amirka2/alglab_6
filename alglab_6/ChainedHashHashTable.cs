@@ -50,8 +50,14 @@ public class ChainedHashHashTable<U> : HashTable<U>
         var index = GetIndexByHash(elem.GetHashCode());
         return this.lst[index].Remove(elem);
     }
-    public bool Contains(Item<U> item)
+    public bool Contains(Item<U> elem)
     {
+        var index = GetIndexByHash(elem.GetHashCode());
+
+        foreach (var e in lst[index])
+        {
+            if (elem.Equals(e)) return true;
+        }
         return false;
     }
     public override bool ContainsItem(Item<U> item)
