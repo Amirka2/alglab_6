@@ -46,6 +46,13 @@ public abstract class HashTable<U>
         return Math.Abs(hash % _items.Length);
     }
 
+    protected int GetIndexByHash(byte[] hash)
+    {
+        var convertedHash = BitConverter.ToInt32(hash);
+        
+        return Math.Abs(convertedHash % _items.Length);
+    }
+
     protected void CheckSize()
     {
         double factor = (double)_loaded / _items.Length;
