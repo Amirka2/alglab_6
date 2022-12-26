@@ -56,16 +56,16 @@ namespace alglab_6
 	        //
 	        // return x1;
 	        
-	        // return HashF(); //линейное
+	         return HashF(); //линейное
 
-	        var x1 = BitConverter.GetBytes(Index * C1 + Math.Pow(Index, 2) * C2); //квадратичное
-	        var x2 = HashF();
-	        for (int i = 0; i < Math.Min(x1.Length, x2.Length); i++)
-	        {
-		        x1[i] += x2[i];
-	        }
-
-	        return x1;
+	        // var x1 = BitConverter.GetBytes(Index * C1 + Math.Pow(Index, 2) * C2); //квадратичное
+	        // var x2 = HashF();
+	        // for (int i = 0; i < Math.Min(x1.Length, x2.Length); i++)
+	        // {
+		       //  x1[i] += x2[i];
+	        // }
+	        //
+	        // return x1;
         }
 
         private byte[] HashF()

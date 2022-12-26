@@ -42,46 +42,52 @@ public class ChainedHashHashTable<U> : HashTable<U>
         return true;
     }
     
-    public override bool Remove(string key, U value)
+    public override bool Remove(string key)
     {
-        return Remove(new Item<U>(key, value));
+        return Remove(new Item<string>(key, ""));
     }
-    public override bool RemoveItem(Item<U> item)
-    {
-        return Remove(item);
-    }
-    private bool Remove(Item<U> elem)
+    private bool Remove(Item<string> elem)
     {
         var index = GetIndexByHash(elem.GetHashCode());
-        return this._lst[index].Remove(elem);
-    }
-    public bool Contains(Item<U> elem)
-    {
-        var index = GetIndexByHash(elem.GetHashCode());
-
-        foreach (var e in _lst[index])
+        if (_lst[index] == null) return false;
+        foreach (var el in _lst[index])
         {
-            if (elem.Equals(e)) return true;
+            if (el.Equals(elem))  return _lst[index].Remove(el);
         }
+
         return false;
     }
-    public override bool ContainsItem(Item<U> item)
+    
+    public override bool Contains(string key)
     {
-        return Contains(item);
+        return Contains(new Item<string>(key, ""));
+    }
+    public bool Contains(Item<string> elem)
+    {
+        var index = GetIndexByHash(elem.GetHashCode());
+        if (_lst[index] == null) return false;
+        foreach (var el in _lst[index])
+        {
+            if (el.Equals(elem))  return true;
+        }
+
+        return false;
     }
     protected override int GetIndexByHash(int hash)
     {
-        throw new NotImplementedException();
+        return Math.Abs(hash % _lst.Length);
     }
 
     protected override int GetIndexByHash(byte[] hash)
     {
-        throw new NotImplementedException();
-    }
-
-    public override bool Contains(string key, U value)
-    {
-        return Contains(new Item<U>(key, value));
+        int sum = 1;
+        for (int i = 0; i < hash.Length; i++)
+        {
+            var convertedHash = BitConverter.ToInt32(hash);
+            sum += convertedHash;
+        }
+        
+        return Math.Abs(sum % _lst.Length);    
     }
 
     protected override void CheckSize()
