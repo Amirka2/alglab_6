@@ -1,15 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using alglab_6;
 
-AdressedHashHashTable<string> ht = new AdressedHashHashTable<string>();
-//MyDictionary<string> at = new MyDictionary<string>();
-FillTable(ht, 100);
-    //FillTable(at, 10000);
-
-int cluster = ht.GetLargestClusterLength();
-Console.WriteLine(cluster);
-
-
+CreateDataForAddressed();
 
 
 void FillTable(HashTable<string> table, int count)
@@ -19,9 +11,25 @@ void FillTable(HashTable<string> table, int count)
     {
         table.AddItem(item);
     }
+}
 
-    foreach (var item in items)
+void CreateDataForAddressed()
+{
+    List<int> clusters = new List<int>();
+    List<int> collissions = new List<int>();
+    for (int i = 0; i < 10; i++)
     {
-        Console.WriteLine(table.Remove(item.Key, item.Value));
+        AdressedHashHashTable<string> ht = new AdressedHashHashTable<string>();
+        FillTable(ht, 3000);
+
+        int cluster = ht.GetLargestClusterLength();
+        int collission = ht.CollisionCount;
+        clusters.Add(cluster);
+        collissions.Add(collission);
     }
+
+    int col = (int)collissions.Average();
+    int cl = (int)clusters.Average();
+    using var sw = new StreamWriter("addressed-data.txt", false);
+    sw.WriteLine($"{col};{cl}");
 }
