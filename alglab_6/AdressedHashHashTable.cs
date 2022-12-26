@@ -37,7 +37,7 @@ namespace alglab_6
             CheckSize();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
-            var index = GetIndexByHash(item.GetHash());
+            var index = GetIndexByHash(item.GetHash(), _items.Length);
             if (_items[index] != null) CollisionCount++; //подсчет коллизий
             for (int i = index; i < _items.Length; i++)
             {
@@ -71,7 +71,7 @@ namespace alglab_6
         }
         private bool Remove(Item<string> item)
         {
-            var index = GetIndexByHash(item.GetHash());
+            var index = GetIndexByHash(item.GetHash(), _items.Length);
 
             do {
                 if (item.Equals(_items[index]))
@@ -93,7 +93,7 @@ namespace alglab_6
         }
         private bool Contains(Item<string> item)
         {
-            var index = GetIndexByHash(item.GetHash());
+            var index = GetIndexByHash(item.GetHash(), _items.Length);
 
             do {
                 if (item.Equals(_items[index]))
@@ -113,7 +113,7 @@ namespace alglab_6
             for (int i = 0; i < _items.Length; i++)
             {
                 if (_items[i] == null) continue;
-                var index = GetIndexByHash(_items[i].GetHash());
+                var index = GetIndexByHash(_items[i].GetHash(), _items.Length);
                 for (int j = index; j < _items.Length; j++)
                 {
                     if (items[j] != null)
@@ -137,7 +137,7 @@ namespace alglab_6
             if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
         }
 
-        protected override int GetIndexByHash(byte[] hash)
+        protected override int GetIndexByHash(byte[] hash, int size)
         {
             int sum = 1;
             for (int i = 0; i < hash.Length; i++)
@@ -146,12 +146,12 @@ namespace alglab_6
                 sum += convertedHash;
             }
         
-            return Math.Abs(sum % _items.Length);
+            return Math.Abs(sum % size);
         }
 
-        protected override int GetIndexByHash(int hash)
+        protected override int GetIndexByHash(int hash, int size)
         {
-            return Math.Abs(hash % _items.Length);
+            return Math.Abs(hash % size);
         }
 
         public int GetLargestClusterLength()

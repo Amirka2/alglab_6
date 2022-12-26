@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using alglab_6;
 
-CreateDataForAddressed();
+CreateDataForChained();
 
 
 void FillTable(HashTable<string> table, int count)
@@ -33,3 +33,24 @@ void CreateDataForAddressed()
     using var sw = new StreamWriter("addressed-data.txt", false);
     sw.WriteLine($"{col};{cl}");
 }
+
+void CreateDataForChained()
+{
+    int count = 100000;
+    ChainedHashHashTable<string> ct = new ChainedHashHashTable<string>();
+    FillTable(ct, count);
+    var length = ct.GetCapacity();
+    List<int> lengths = new List<int>();
+    for (int i = 0; i < length; i++)
+    {
+        lengths.Add(ct.GetCapacity(i));
+    }
+
+    using StreamWriter sw = new StreamWriter("chained-data.txt", false);
+    for (int i = 0; i < lengths.Count; i++)
+    {
+        sw.WriteLine($"{i};{lengths[i]}");
+    }
+    sw.WriteLine("максимальная длина цепочки: " + ct.GetMaxChainLength());
+}
+    
