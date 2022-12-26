@@ -2,9 +2,11 @@
 using alglab_6;
 
 AdressedHashHashTable<string> ht = new AdressedHashHashTable<string>();
+ChainedHashHashTable<string> ct = new ChainedHashHashTable<string>();
 //MyDictionary<string> at = new MyDictionary<string>();
-FillTable(ht, 100);
+//FillTable(ht, 100);
     //FillTable(at, 10000);
+FillTable(ct, 100);
 
 int cluster = ht.GetLargestClusterLength();
 Console.WriteLine(cluster);

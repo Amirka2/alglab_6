@@ -27,19 +27,36 @@ public class ChainedHashHashTable<U> : HashTable<U>
     {
         return Add(item);
     }
-    private bool Add(Item<U> elem)
+    private bool Add(Item<U> elem) //ПЕРЕДЕЛАТЬ
     {
         CheckSize();
-        var index = GetIndexByHash(elem.GetHashCode());
-        foreach (var e in _lst)
+        if (elem.Value == null) throw new ArgumentNullException("item's value is null!");
+
+        var index = GetIndexByHash(elem.GetHash());
+
+        for (int i = index; i < _lst.Length; i++)
         {
-            if (e.Equals(elem))
+            if (i == _lst.Length - 1 && _lst[i] != null)
+            {
+                i = 0;
+                continue;
+            }
+            if (elem.Equals(_lst[i]))
             {
                 return false;
             }
+
+            if (_lst[i] == null) //если проверили все значения которые могли сместиться(конец кластера) . заменить на проверку удаленных хэшей
+            {
+                _lst.SetValue(elem, i);
+                var castedElem = (Item<U>)_lst.GetValue(i);
+                Console.WriteLine( castedElem.Key+ ": el, " + i + ": index");
+                _loaded++;
+                return true;           
+            }
         }
-        _lst[index].AddLast(elem);
-        return true;
+
+        return false;
     }
     
     public override bool Remove(string key, U value)
@@ -53,16 +70,22 @@ public class ChainedHashHashTable<U> : HashTable<U>
     private bool Remove(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHashCode());
-        return this._lst[index].Remove(elem);
+        return _lst[index].Remove(elem);
     }
     public bool Contains(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHashCode());
 
-        foreach (var e in _lst[index])
+        do
         {
-            if (elem.Equals(e)) return true;
-        }
+            if (elem.Equals(_lst[index]))
+            {
+                return true;
+            }
+
+            index++;
+        } while (index < _lst.Length);
+
         return false;
     }
     public override bool ContainsItem(Item<U> item)
@@ -71,12 +94,19 @@ public class ChainedHashHashTable<U> : HashTable<U>
     }
     protected override int GetIndexByHash(int hash)
     {
-        throw new NotImplementedException();
+        return Math.Abs(hash % _lst.Length);
     }
 
     protected override int GetIndexByHash(byte[] hash)
     {
-        throw new NotImplementedException();
+        int sum = 1;
+        for (int i = 0; i < hash.Length; i++)
+        {
+            var convertedHash = BitConverter.ToInt32(hash);
+            sum += convertedHash;
+        }
+        
+        return Math.Abs(sum % _lst.Length) - 1;
     }
 
     public override bool Contains(string key, U value)
@@ -95,10 +125,19 @@ public class ChainedHashHashTable<U> : HashTable<U>
         LinkedList<Item<U>>[] lst = new LinkedList<Item<U>>[_lst.Length * 2];
         for (int i = 0; i < _lst.Length; i++)
         {
-            if (_lst[i] is null) continue;
+            if (_lst[i] == null) continue;
             var index = GetIndexByHash(_lst[i].GetHashCode());
-
-            lst[index] = _lst[i];
+            for (int j = index; j < _lst.Length; j++)
+            {
+                if (lst[j] != null)
+                {
+                    continue;
+                }
+                else
+                {
+                    lst[i] = _lst[j];
+                }
+            }
         }
 
         _lst = lst;
