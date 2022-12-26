@@ -15,18 +15,13 @@ Console.WriteLine(cluster);
 void FillTable(HashTable<string> table, int count)
 {
     Item<string>[] items = Generator.GenerateItems(count);
-    int c = 0;
     foreach (var item in items)
     {
-        if (table.AddItem(item))
-        {
-            Console.WriteLine(item.Key + " / " + c);
-            c++;
-        }
+        table.AddItem(item);
     }
 
-    // foreach (var item in items)
-    // {
-    //     Console.WriteLine(table.Contains(item.Key, item.Value));
-    // }
+    foreach (var item in items)
+    {
+        Console.WriteLine(table.Remove(item.Key, item.Value));
+    }
 }
