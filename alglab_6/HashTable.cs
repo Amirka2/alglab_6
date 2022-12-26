@@ -25,6 +25,6 @@ public abstract class HashTable<U>
     protected abstract void CheckSize();
     protected abstract void ResizeTable();
     
-    protected abstract int GetIndexByHash(int hash);
-    protected abstract int GetIndexByHash(byte[] hash);
+    protected abstract int GetIndexByHash(int hash, int size);
+    protected abstract int GetIndexByHash(byte[] hash, int size);
 }
