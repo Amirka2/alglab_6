@@ -38,7 +38,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
                 return false;
             }
         }
-        _lst[index].AddLast(elem);
+        lst[index].AddLast(elem);
         return true;
     }
     
@@ -69,6 +69,16 @@ public class ChainedHashHashTable<U> : HashTable<U>
     {
         return Contains(item);
     }
+    protected override int GetIndexByHash(int hash)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override int GetIndexByHash(byte[] hash)
+    {
+        throw new NotImplementedException();
+    }
+
     public override bool Contains(string key, U value)
     {
         return Contains(new Item<U>(key, value));
