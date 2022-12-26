@@ -38,7 +38,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
                 return false;
             }
         }
-        lst[index].AddLast(elem);
+        _lst[index].AddLast(elem);
         return true;
     }
     
