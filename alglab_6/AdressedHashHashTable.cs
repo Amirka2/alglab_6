@@ -7,16 +7,20 @@ namespace alglab_6
 {
     public class AdressedHashHashTable<U> : HashTable<U>
     {
+        private Item<U>[] _items;
         private List<int> _clusterCounts = new List<int>();
 
         public AdressedHashHashTable()
         {
+            _items = new Item<U>[8];
         }
         public AdressedHashHashTable(int capacity) : base(capacity)
         {
+            _items = new Item<U>[capacity];
         }
         public AdressedHashHashTable(int capacity, float loadFactor) : base(capacity, loadFactor)
         {
+            _items = new Item<U>[capacity];
         }
         
         public override bool Add(string key, U data)
@@ -32,10 +36,15 @@ namespace alglab_6
             CheckSize();
             if (item.Value == null) throw new ArgumentNullException("item's value is null!");
 
-            var index = GetIndexByHash(item.GetHashCode());
+            var index = GetIndexByHash(item.GetHash());
 
             for (int i = index; i < _items.Length; i++)
             {
+                if (i == _items.Length - 1 && _items[i] != null)
+                {
+                    i = 0;
+                    continue;
+                }
                 _clusterCounts.Add(0);
                 if (item.Equals(_items[i]))
                 {
@@ -44,7 +53,8 @@ namespace alglab_6
 
                 if (_items[i] == null) //если проверили все значения которые могли сместиться(конец кластера) . заменить на проверку удаленных хэшей
                 {
-                    _items[index] = item;
+                    _items[i] = item;
+                    Console.WriteLine(_items[i].Key + ": el, " + i + ": index");
                     _loaded++;
                     return true;                
                 }
@@ -65,7 +75,7 @@ namespace alglab_6
         }
         private bool Remove(Item<U> item)//? key or value
         {
-            var index = GetIndexByHash(item.GetHashCode());
+            var index = GetIndexByHash(item.GetHash());
 
             do {
                 if (item.Equals(_items[index]))
@@ -76,7 +86,7 @@ namespace alglab_6
                 }
 
                 index++;
-            } while (index < _loaded);
+            } while (index < _items.Length);
 
             return false;
         }
@@ -91,7 +101,7 @@ namespace alglab_6
         }
         private bool Contains(Item<U> item)
         {
-            var index = GetIndexByHash(item.GetHashCode());
+            var index = GetIndexByHash(item.GetHash());
 
             do {
                 if (item.Equals(_items[index]))
@@ -100,9 +110,56 @@ namespace alglab_6
                 }
 
                 index++;
-            } while (index < _loaded);
+            } while (index < _items.Length);
 
             return false;
+        }
+
+        protected override void ResizeTable()
+        {
+            Item<U>[] items = new Item<U>[_items.Length * 2];
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null) continue;
+                var index = GetIndexByHash(_items[i].GetHash());
+                for (int j = index; j < _items.Length; j++)
+                {
+                    if (items[j] != null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        items[j] = _items[i];
+                        break;
+                    }
+                }
+            }
+
+            _items = items;
+        }
+
+        protected override void CheckSize()
+        {
+            double factor = (double)_loaded / _items.Length;
+            if (_loadFactor.CompareTo(factor) <= 0) ResizeTable();
+        }
+
+        protected override int GetIndexByHash(byte[] hash)
+        {
+            int sum = 1;
+            for (int i = 0; i < hash.Length; i++)
+            {
+                var convertedHash = BitConverter.ToInt32(hash);
+                sum += convertedHash;
+            }
+        
+            return Math.Abs(sum % _items.Length) - 1;
+        }
+
+        protected override int GetIndexByHash(int hash)
+        {
+            return Math.Abs(hash % _items.Length);
         }
 
         public int GetLargestClusterLength()
