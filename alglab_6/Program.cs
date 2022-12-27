@@ -3,7 +3,7 @@ using alglab_6;
 
 //CreateDataForChained();
 //CreateDataForAddressed();
-ShowWork(1);
+ShowWork();
 
 
 void FillTable(HashTable<string> table, int count)
@@ -59,23 +59,39 @@ void CreateDataForChained()
 void ShowWork(int opt = 0)
 {
     HashTable<int> at;
-    if (opt == 0) at = new AdressedHashHashTable<int>();
-    else at = new ChainedHashTable<int>();
-    at.Add("0", 0);
-    at.Add("1", 0);
-    at.Add("2", 0);
-    at.Add("3", 0);
-    at.Add("0", 0);
-    Console.WriteLine(at.Add("0", 0) + " - added 0");
+    if (opt == 0)
+    {
+        at = new AdressedHashHashTable<int>();
+        Console.WriteLine("Addressed Hashtable is being used");
+    }
+    else
+    {
+        at = new ChainedHashTable<int>();
+        Console.WriteLine("Chained Hashtable is being used");
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("added 0: " + at.Add("0", 0));
+    Console.WriteLine("added 1: " + at.Add("1", 0));
+    Console.WriteLine("added 2: " + at.Add("2", 0));
+    Console.WriteLine("added 3: " + at.Add("3", 0));
+    Console.WriteLine("added 4: " + at.Add("4", 0));
+    Console.WriteLine("added 0: " + at.Add("0", 0));
+    Console.WriteLine("added 3: " + at.Add("3", 0));
+
+    Console.WriteLine();
     Console.WriteLine(at.Contains(new Item<int>("0", 0)) ? "contains 0" : "doesnt contain 0");
     Console.WriteLine(at.Contains(new Item<int>("1", 0)) ? "contains 1" : "doesnt contain 1");
     Console.WriteLine(at.Contains(new Item<int>("2", 0)) ? "contains 2" : "doesnt contain 2");
     Console.WriteLine(at.Contains(new Item<int>("3", 0)) ? "contains 3" : "doesnt contain 3");
     Console.WriteLine(at.Contains(new Item<int>("5", 0)) ? "contains 5" : "doesnt contain 5");
-    at.Remove(new Item<int>("0", 10));
-    at.Remove(new Item<int>("1", 10));
-    at.Remove(new Item<int>("2", 10));
-    at.Remove(new Item<int>("3", 10));
+
+    Console.WriteLine();
+    Console.WriteLine("removed 0: " + at.Remove(new Item<int>("0", 0)));
+    Console.WriteLine("removed 1: " + at.Remove(new Item<int>("1", 0)));
+    Console.WriteLine("removed 2: " + at.Remove(new Item<int>("2", 0)));
+    Console.WriteLine("removed 3: " + at.Remove(new Item<int>("3", 0)));
+
     Console.WriteLine();
     Console.WriteLine(at.Contains(new Item<int>("0", 0)) ? "contains 0" : "doesnt contain 0");
     Console.WriteLine(at.Contains(new Item<int>("1", 0)) ? "contains 1" : "doesnt contain 1");
