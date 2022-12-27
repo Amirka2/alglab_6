@@ -11,6 +11,7 @@ namespace alglab_6
 		public U Value { get; private set; }
 		private const double GOLDEN_RATIO = 1.61803398;
 		public int Index { get; set; }
+		
 		private const double C1 = 1;
 		private const double C2 = 2;
 
@@ -56,7 +57,7 @@ namespace alglab_6
 	        //
 	        // return x1;
 	        
-	         return HashF(); //линейное
+	        return HashF(); //линейное
 
 	        // var x1 = BitConverter.GetBytes(Index * C1 + Math.Pow(Index, 2) * C2); //квадратичное
 	        // var x2 = HashF();
@@ -72,7 +73,7 @@ namespace alglab_6
         {
 	        byte[] res;
 	        // Creates an instance of the default implementation of the MD5 hash algorithm.
-	        using (var hash = SHA1.Create())
+	        using (var hash = MD5.Create())
 	        {
 		        // Byte array representation of source string
 		        var sourceBytes = Encoding.UTF8.GetBytes(Key);
@@ -90,12 +91,13 @@ namespace alglab_6
 	        switch (option)
 	        {
 		        case 0:
-			        return BitConverter.GetBytes(Math.Abs(10000 * (Key.GetHashCode() * GOLDEN_RATIO % 1))); //сделать переменную размер таблмцы для скринов
+			        return BitConverter.GetBytes(Math.Abs(10000 * (Key.GetHashCode() * GOLDEN_RATIO % 1)));
 			        break;
 		        case 1:
 			        return BitConverter.GetBytes(Math.Abs(Key.GetHashCode() % 10000));
 			        break;
 		        default:
+			        return BitConverter.GetBytes(Key.GetHashCode());
 			        break;
 	        }
 

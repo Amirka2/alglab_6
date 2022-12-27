@@ -13,7 +13,7 @@ namespace alglab_6
 
         public AdressedHashHashTable()
         {
-            _items = new Item<U>[10000];
+            _items = new Item<U>[8];
         }
         public AdressedHashHashTable(int capacity) : base(capacity)
         {

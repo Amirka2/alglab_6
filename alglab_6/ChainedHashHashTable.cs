@@ -3,11 +3,10 @@
 public class ChainedHashTable<U> : HashTable<U>
 {
     private LinkedList<Item<U>>[] _lst;
-    private int load = 200; // для корректного расширения таблицы допилить 
 
     public ChainedHashTable()
     {
-        _lst = new LinkedList<Item<U>>[1000];
+        _lst = new LinkedList<Item<U>>[8];
     }
 
     public ChainedHashTable(int capacity) : base(capacity)
