@@ -65,11 +65,7 @@ namespace alglab_6
             return false;
         }
 
-        public override bool Remove(string key)
-        {
-            return Remove(new Item<string>(key, ""));
-        }
-        private bool Remove(Item<string> item)
+        public  override bool Remove(Item<U> item)
         {
             var index = GetIndexByHash(item.GetHash(), _items.Length);
 
@@ -87,11 +83,7 @@ namespace alglab_6
             return false;
         }
 
-        public override bool Contains(string key)
-        {
-            return Contains(new Item<string>(key, ""));
-        }
-        private bool Contains(Item<string> item)
+        public override bool Contains(Item<U> item)
         {
             var index = GetIndexByHash(item.GetHash(), _items.Length);
 
@@ -110,6 +102,9 @@ namespace alglab_6
         protected override void ResizeTable()
         {
             Item<U>[] items = new Item<U>[_items.Length * 2];
+            _clusterCounts.Clear();
+            CollisionCount = 0;
+            _loaded = 0;
             for (int i = 0; i < _items.Length; i++)
             {
                 if (_items[i] == null) continue;
@@ -118,11 +113,14 @@ namespace alglab_6
                 {
                     if (items[j] != null)
                     {
+                        CollisionCount++;
+                        _clusterCounts[_loaded]++;
                         continue;
                     }
                     else
                     {
                         items[j] = new Item<U>(_items[i].Key, _items[i].Value, j);
+                        _loaded++;
                         break;
                     }
                 }

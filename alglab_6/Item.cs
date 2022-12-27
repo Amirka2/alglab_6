@@ -72,13 +72,13 @@ namespace alglab_6
         {
 	        byte[] res;
 	        // Creates an instance of the default implementation of the MD5 hash algorithm.
-	        using (var md5Hash = MD5.Create())
+	        using (var hash = SHA1.Create())
 	        {
 		        // Byte array representation of source string
 		        var sourceBytes = Encoding.UTF8.GetBytes(Key);
 
 		        // Generate hash value(Byte Array) for input data
-		        var hashBytes = md5Hash.ComputeHash(sourceBytes);
+		        var hashBytes = hash.ComputeHash(sourceBytes);
 		        res = hashBytes;
 	        }
 

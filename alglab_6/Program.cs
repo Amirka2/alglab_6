@@ -1,7 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using alglab_6;
 
-CreateDataForChained();
+//CreateDataForChained();
+//CreateDataForAddressed();
+ShowWork(0);
 
 
 void FillTable(HashTable<string> table, int count)
@@ -37,7 +39,7 @@ void CreateDataForAddressed()
 void CreateDataForChained()
 {
     int count = 100000;
-    ChainedHashHashTable<string> ct = new ChainedHashHashTable<string>();
+    ChainedHashTable<string> ct = new ChainedHashTable<string>();
     FillTable(ct, count);
     var length = ct.GetCapacity();
     List<int> lengths = new List<int>();
@@ -53,4 +55,31 @@ void CreateDataForChained()
     }
     sw.WriteLine("максимальная длина цепочки: " + ct.GetMaxChainLength());
 }
-    
+
+void ShowWork(int opt = 0)
+{
+    HashTable<int> at;
+    if (opt == 0) at = new AdressedHashHashTable<int>();
+    else at = new ChainedHashTable<int>();
+    at.Add("0", 0);
+    at.Add("1", 0);
+    at.Add("2", 0);
+    at.Add("3", 0);
+    at.Add("0", 0);
+    Console.WriteLine(at.Add("0", 0));
+    Console.WriteLine(at.Contains(new Item<int>("0", 0)) ? "contains 0" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("1", 0)) ? "contains 1" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("2", 0)) ? "contains 2" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("3", 0)) ? "contains 3" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("5", 0)) ? "contains 5" : "doesnt contain 5");
+    at.Remove(new Item<int>("0", 10));
+    at.Remove(new Item<int>("1", 10));
+    at.Remove(new Item<int>("2", 10));
+    at.Remove(new Item<int>("3", 10));
+    Console.WriteLine();
+    Console.WriteLine(at.Contains(new Item<int>("0", 0)) ? "contains 0" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("1", 0)) ? "contains 1" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("2", 0)) ? "contains 2" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("3", 0)) ? "contains 3" : "doesnt contain");
+    Console.WriteLine(at.Contains(new Item<int>("5", 0)) ? "contains 5" : "doesnt contain 5");
+}

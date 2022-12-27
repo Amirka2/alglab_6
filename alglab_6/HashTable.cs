@@ -18,9 +18,9 @@ public abstract class HashTable<U>
 
     public abstract bool Add(string key, U value);
     public abstract bool AddItem(Item<U> item);
-    public abstract bool Remove(string key);
+    public abstract bool Remove(Item<U> item);
 
-    public abstract bool Contains(string key);
+    public abstract bool Contains(Item<U> item);
 
     protected abstract void CheckSize();
     protected abstract void ResizeTable();

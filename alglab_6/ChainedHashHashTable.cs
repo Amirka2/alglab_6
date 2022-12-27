@@ -1,21 +1,21 @@
 ﻿namespace alglab_6;
 
-public class ChainedHashHashTable<U> : HashTable<U>
+public class ChainedHashTable<U> : HashTable<U>
 {
     private LinkedList<Item<U>>[] _lst;
-    private int load = 100; // для корректного расширения таблицы допилить 
+    private int load = 200; // для корректного расширения таблицы допилить 
 
-    public ChainedHashHashTable()
+    public ChainedHashTable()
     {
         _lst = new LinkedList<Item<U>>[1000];
     }
 
-    public ChainedHashHashTable(int capacity) : base(capacity)
+    public ChainedHashTable(int capacity) : base(capacity)
     {
         _lst = new LinkedList<Item<U>>[capacity];
     }
 
-    public ChainedHashHashTable(int capacity, float loadFactor) :base(capacity, loadFactor)
+    public ChainedHashTable(int capacity, float loadFactor) :base(capacity, loadFactor)
     {
         _lst = new LinkedList<Item<U>>[capacity];
     }
@@ -51,11 +51,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
 
     }
     
-    public override bool Remove(string key)
-    {
-        return Remove(new Item<string>(key, ""));
-    }
-    private bool Remove(Item<string> elem)
+    public override bool Remove(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHash(), _lst.Length);
         if (_lst[index] == null) return false;
@@ -67,11 +63,7 @@ public class ChainedHashHashTable<U> : HashTable<U>
         return false;
     }
     
-    public override bool Contains(string key)
-    {
-        return Contains(new Item<string>(key, ""));
-    }
-    public bool Contains(Item<string> elem)
+    public override bool Contains(Item<U> elem)
     {
         var index = GetIndexByHash(elem.GetHash(), _lst.Length);
         if (_lst[index] == null) return false;
@@ -111,9 +103,17 @@ public class ChainedHashHashTable<U> : HashTable<U>
         for (int i = 0; i < _lst.Length; i++)
         {
             if (_lst[i] is null) continue;
-            var index = GetIndexByHash(_lst[i].GetHashCode(), lst.Length);
+            var index = GetIndexByHash(_lst[i].Last().GetHash(), lst.Length);
 
-            lst[index] = _lst[i];
+            if (lst[index] != null)
+            {
+                lst[index] = _lst[i];
+            }
+            if (lst[index] == null)
+            {
+                lst[index] = new LinkedList<Item<U>>();
+                lst[index] = _lst[i];
+            }
         }
 
         _lst = lst;
