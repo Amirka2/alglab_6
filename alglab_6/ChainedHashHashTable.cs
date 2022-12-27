@@ -42,9 +42,12 @@ public class ChainedHashTable<U> : HashTable<U>
         {
             foreach (var el in _lst[index])
             {
-                if (el.Equals(elem)) return false;
+                if (el.Value.Equals(elem.Value))
+                {
+                    _lst[index].AddLast(elem);
+                    return false;
+                }
             }
-            _lst[index].AddLast(elem);
         }
 
         return true;
